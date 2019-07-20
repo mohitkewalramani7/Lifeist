@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/all_dates" android:id="@+id/all_dates"/>
+    <item android:title="@string/dashboard" android:id="@+id/dashboard"/>
+    <item android:title="@string/my_preferences" android:id="@+id/my_preferences"/>
+</menu>

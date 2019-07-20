@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lifeist</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+
+    <string name="all_dates">All Dates</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="my_preferences">My Preferences</string>
+
+    <string name="dashboard_heading">Dashboard</string>
+
+</resources>
