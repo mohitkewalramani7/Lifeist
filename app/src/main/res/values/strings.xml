@@ -8,6 +8,14 @@
     <string name="dashboard">Dashboard</string>
     <string name="my_preferences">My Preferences</string>
 
-    <string name="dashboard_heading">Dashboard</string>
+    <string name="hello">Hello</string>
+    <string name="user_profile_picture">User Profile Picture</string>
+    <string name="user_email_address">mohit@lifeist.com</string>
+    <string name="change_user_email_address">Change Email</string>
+    <string name="user_phone_number">111–111–1111</string>
+    <string name="change_user_phone_number">Change Phone Number</string>
+    <string name="change_user_password">Change Password</string>
+    <string name="task_display_settings">Task Display Settings</string>
+    <string name="notification_preferences">Change Password</string>
 
 </resources>

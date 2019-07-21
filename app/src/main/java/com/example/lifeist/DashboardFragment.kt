@@ -1,18 +1,13 @@
 package com.example.lifeist
 
-import android.app.Activity
 import android.content.Context
-import android.database.DataSetObserver
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.Layout
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import kotlinx.android.synthetic.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,15 +20,6 @@ import kotlinx.android.synthetic.*
  */
 class DashboardFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
-
-    private fun populateListView() : DashboardListAdapterTwo {
-        val cardList = arrayListOf<String>()
-        cardList.add("A")
-        cardList.add("B")
-        val dash = DashboardListAdapterTwo()
-        dash.dashboardListItems = cardList
-        return dash
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -60,6 +46,12 @@ class DashboardFragment : Fragment() {
         lv.adapter = populateListView()
     }
 
+    private fun populateListView() : DashboardListAdapter {
+        val dash = DashboardListAdapter()
+        dash.dashboardListItems = HomeActivity.categoryList
+        return dash
+    }
+
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
     }
@@ -70,21 +62,38 @@ class DashboardFragment : Fragment() {
     }
 }
 
-class DashboardListAdapterTwo() : BaseAdapter() {
+internal class DashboardListAdapter : BaseAdapter() {
 
-    var dashboardListItems = ArrayList<String>()
+    var dashboardListItems = ArrayList<Category>()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var localConvertView = convertView
         if (localConvertView == null){
-            localConvertView = LayoutInflater.from(parent!!.context).inflate(R.layout.dashboard_card, parent, false)
+            localConvertView = LayoutInflater.from(parent!!.context)
+                .inflate(R.layout.dashboard_list_item, parent, false)
         }
-        val listItem = localConvertView!!.findViewById<TextView>(R.id.dashboardListItem)
-        listItem.text = getItem(position) as String
+        val currentCategory: Category = getItem(position)
+        setCategoryText(currentCategory.title, localConvertView!!)
+        setCategoryCount(currentCategory.size, localConvertView)
         return localConvertView
     }
 
-    override fun getItem(position: Int): Any {
+    private fun setCategoryText(title: String, localConvertView: View) {
+        val categoryText = localConvertView.findViewById<TextView>(R.id.dashboardListItem)
+        categoryText.text = title
+    }
+
+    private fun setCategoryCount(count: Int, localConvertView: View){
+        val categoryCount = localConvertView.findViewById<TextView>(R.id.listItemCount)
+        if (count > 1){
+            categoryCount.text = String.format("%d items", count)
+        }
+        else{
+            categoryCount.text = String.format("%d item", count)
+        }
+    }
+
+    override fun getItem(position: Int): Category {
         return dashboardListItems[position]
     }
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".PreferencesFragment"
+            tools:ignore="UseCompoundDrawables">
+
+        <TextView
+                android:id="@+id/preferencesHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginBottom="@dimen/margin_extra_large"
+                android:text="@string/hello"
+                android:textSize="@dimen/activity_headers"
+                android:textAlignment="center"/>
+
+        <ImageView
+                android:id="@+id/userProfilePicture"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:background="@drawable/user_profile_image"
+                android:contentDescription="@string/user_profile_picture"/>
+
+        <TextView
+                android:id="@+id/userEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:text="@string/user_email_address"
+                android:textSize="@dimen/medium_text"
+                android:textAlignment="center"/>
+
+        <android.support.design.button.MaterialButton
+                android:id="@+id/changeUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/change_user_email_address"
+                android:textSize="@dimen/large_text"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+
+        <TextView
+                android:id="@+id/userPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:text="@string/user_phone_number"
+                android:textSize="@dimen/medium_text"
+                android:textAlignment="center"/>
+
+        <android.support.design.button.MaterialButton
+                android:id="@+id/changeUserPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_extra_large"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/change_user_phone_number"
+                android:textSize="@dimen/large_text"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+
+        <android.support.design.button.MaterialButton
+                android:id="@+id/changeUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_extra_large"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/change_user_password"
+                android:textSize="@dimen/large_text"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+
+        <android.support.design.button.MaterialButton
+                android:id="@+id/changeTaskDisplayDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_extra_large"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/task_display_settings"
+                android:textSize="@dimen/large_text"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+
+        <android.support.design.button.MaterialButton
+                android:id="@+id/changeNotificationSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_extra_large"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/notification_preferences"
+                android:textSize="@dimen/large_text"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+    </LinearLayout>
+
+</ScrollView>
