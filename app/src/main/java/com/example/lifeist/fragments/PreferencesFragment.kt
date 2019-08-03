@@ -1,4 +1,4 @@
-package com.example.lifeist
+package com.example.lifeist.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.lifeist.R
 
 /**
  * A simple [Fragment] subclass.

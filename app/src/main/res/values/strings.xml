@@ -1,13 +1,44 @@
 <resources>
+
+    <!-- Login and App strings -->
     <string name="app_name">Lifeist</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
 
+    <!-- Multi-purpose strings -->
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="error_deleting">Error</string>
+    <string name="error_deleting_message">Error in Deleting Item</string>
+
+    <!-- Tab names -->
     <string name="all_dates">All Dates</string>
     <string name="dashboard">Dashboard</string>
     <string name="my_preferences">My Preferences</string>
 
+    <!-- Dashboard Fragment -->
+    <string name="category_name">Category Name</string>
+    <string name="category_description">Category Description</string>
+    <!-- Category CRUD -->
+    <string name="create_category">Create Category</string>
+    <string name="update_category">Update Category</string>
+    <string name="delete_category">Delete Category</string>
+    <string name="delete_category_message">Are you sure you want to
+        delete this category? All associated tasks will also be deleted
+    </string>
+    <!-- Task CRUD -->
+    <string name="create_task">Create Task</string>
+    <string name="create_task_hint">Task Name</string>
+    <string name="create_task_date">Task Due Date</string>
+    <string name="create_task_description">Task Description</string>
+    <string name="update_task">Update Task</string>
+    <string name="delete_task">Delete Task</string>
+    <string name="delete_task_message">Are you sure you want to
+        delete this task?
+    </string>
+
+    <!-- Preferences Fragment -->
     <string name="hello">Hello</string>
     <string name="user_profile_picture">User Profile Picture</string>
     <string name="user_email_address">mohit@lifeist.com</string>

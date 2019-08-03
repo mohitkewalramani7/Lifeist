@@ -1,13 +1,20 @@
-package com.example.lifeist
+package com.example.lifeist.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.lifeist.category.CreateAndEditCategoryActivity
+import com.example.lifeist.category.Category
+import com.example.lifeist.category.CategoryDisplayActivity
+import com.example.lifeist.HomeActivity
+import com.example.lifeist.R
 
 /**
  * A simple [Fragment] subclass.
@@ -20,6 +27,7 @@ import android.widget.*
  */
 class DashboardFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var categoriesList: ListView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -42,14 +50,36 @@ class DashboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val lv: ListView = activity!!.findViewById(R.id.dashboardListView)
-        lv.adapter = populateListView()
+        initializeCategoryListview()
+        initializeAddCategoryButton()
+        initializeListviewClickListener()
+    }
+
+    private fun initializeCategoryListview(){
+        categoriesList = activity!!.findViewById(R.id.dashboardListView)
+        categoriesList.adapter = populateListView()
     }
 
     private fun populateListView() : DashboardListAdapter {
         val dash = DashboardListAdapter()
         dash.dashboardListItems = HomeActivity.categoryList
         return dash
+    }
+
+    private fun initializeAddCategoryButton(){
+        val addCategoryFab = activity!!.findViewById<FloatingActionButton>(R.id.addCategoryButton)
+        addCategoryFab.setOnClickListener {
+            val intent = Intent(context, CreateAndEditCategoryActivity::class.java)
+            intent.putExtra(CreateAndEditCategoryActivity.INTENT_TYPE, CreateAndEditCategoryActivity.CREATE_CATEGORY)
+            startActivity(intent)
+        }
+    }
+
+    private fun initializeListviewClickListener(){
+        categoriesList.onItemClickListener = AdapterView.OnItemClickListener {_, _, _, _ ->
+            val intent = Intent(context, CategoryDisplayActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     interface OnFragmentInteractionListener {

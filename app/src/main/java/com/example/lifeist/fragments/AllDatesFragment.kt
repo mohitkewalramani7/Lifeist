@@ -1,4 +1,4 @@
-package com.example.lifeist
+package com.example.lifeist.fragments
 
 import android.content.Context
 import android.net.Uri
@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
+import com.example.lifeist.HomeActivity
+import com.example.lifeist.R
 
 /**
  * A simple [Fragment] subclass.
@@ -50,7 +52,7 @@ class AllDatesFragment : Fragment() {
 
     private fun populateListView() : AllDatesListAdapter {
         val dash = AllDatesListAdapter()
-        dash.tasksListDates = HomeActivity.taskList
+        dash.tasksListDates = HomeActivity.dateList
         return dash
     }
 

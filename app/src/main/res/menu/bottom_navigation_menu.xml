@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/all_dates" android:id="@+id/all_dates"/>
-    <item android:title="@string/dashboard" android:id="@+id/dashboard"/>
-    <item android:title="@string/my_preferences" android:id="@+id/my_preferences"/>
+
+    <item android:id="@+id/all_dates"
+          android:icon="@drawable/ic_date_range_white"
+          android:title="@string/all_dates"/>
+
+    <item android:id="@+id/dashboard"
+          android:icon="@drawable/ic_dashboard_white"
+          android:title="@string/dashboard"/>
+
+    <item android:id="@+id/my_preferences"
+          android:icon="@drawable/ic_user_image"
+          android:title="@string/my_preferences"/>
+
 </menu>

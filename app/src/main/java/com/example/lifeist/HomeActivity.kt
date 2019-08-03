@@ -7,7 +7,14 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.view.MenuItem
 import android.widget.Toast
+import com.example.lifeist.category.Category
+import com.example.lifeist.fragments.AllDatesFragment
+import com.example.lifeist.fragments.DashboardFragment
+import com.example.lifeist.fragments.PreferencesFragment
+import com.example.lifeist.task.Task
 import kotlinx.android.synthetic.main.activity_home.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeActivity :
     AppCompatActivity(),
@@ -23,7 +30,8 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         categoryList = constructCategoryDummyData()
-        taskList = constructTasksDummyData()
+        dateList = constructDatesDummyData()
+        taskList = constructTasksData()
         setupBottomNavigationListener()
         bottomNavigationView.selectedItemId = R.id.dashboard
     }
@@ -39,7 +47,7 @@ class HomeActivity :
         return categoryList
     }
 
-    private fun constructTasksDummyData() : ArrayList<String> {
+    private fun constructDatesDummyData() : ArrayList<String> {
         val miniList = arrayListOf<String>()
         miniList.add("2019-08-01")
         miniList.add("2019-08-05")
@@ -47,6 +55,16 @@ class HomeActivity :
         miniList.add("2019-08-12")
         miniList.add("2019-08-25")
         return miniList
+    }
+
+    private fun constructTasksData() : ArrayList<Task> {
+        val taskList = arrayListOf<Task>()
+        taskList.add(Task("A", "First", "2019-7-28"))
+        taskList.add(Task("B", "Second", "2019-7-29"))
+        taskList.add(Task("C", "Third", "2019-7-30"))
+        taskList.add(Task("D", "Fourth", "2019-7-21"))
+        taskList.add(Task("E", "Fifth", "2019-7-15"))
+        return taskList
     }
 
     private fun setupBottomNavigationListener(){
@@ -93,7 +111,8 @@ class HomeActivity :
 
     companion object {
         var categoryList = ArrayList<Category>()
-        var taskList = ArrayList<String>()
+        var dateList = ArrayList<String>()
+        var taskList = ArrayList<Task>()
     }
 
 }

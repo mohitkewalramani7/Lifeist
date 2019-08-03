@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            tools:context=".PreferencesFragment"
+            tools:context=".fragments.PreferencesFragment"
             tools:ignore="UseCompoundDrawables">
 
         <TextView
@@ -28,7 +28,7 @@
                 android:layout_height="200dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                android:background="@drawable/user_profile_image"
+                android:background="@drawable/ic_user_icon"
                 android:contentDescription="@string/user_profile_picture"/>
 
         <TextView
