@@ -13,7 +13,7 @@ import com.example.lifeist.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class CreateAndEditTaskActivity : AppCompatActivity(){
+class CreateAndEditTaskActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener{
 
     private lateinit var taskDateButton: MaterialButton
 
@@ -49,14 +49,8 @@ class CreateAndEditTaskActivity : AppCompatActivity(){
             val currentYear = cal.get(Calendar.YEAR)
             val currentMonth = cal.get(Calendar.MONTH)
             val currentDay = cal.get(Calendar.DAY_OF_MONTH)
-            val datePickerDialog = DatePickerDialog(it.context, null, currentYear, currentMonth, currentDay)
+            val datePickerDialog = DatePickerDialog(it.context, this, currentYear, currentMonth, currentDay)
             datePickerDialog.show()
-            // TODO: check OS API alternatives
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
-                    taskDateButton.text = String.format("Task Due Date: %04d-%02d-%02d", year, month+1, dayOfMonth)
-                }
-            }
         }
     }
 
@@ -64,6 +58,11 @@ class CreateAndEditTaskActivity : AppCompatActivity(){
         findViewById<MaterialButton>(R.id.cancelTask).setOnClickListener{
             this.finish()
         }
+    }
+
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        taskDateButton.text = String.format("Task Due Date: %04d-%02d-%02d", year, month+1, dayOfMonth)
     }
 
     companion object {
