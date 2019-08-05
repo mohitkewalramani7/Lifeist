@@ -3,18 +3,18 @@ package com.example.lifeist.category
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentActivity
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.example.lifeist.HomeActivity
 import com.example.lifeist.R
 import com.example.lifeist.task.CreateAndEditTaskActivity
 import com.example.lifeist.task.Task
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CategoryDisplayActivity : AppCompatActivity() {
 
@@ -129,6 +129,7 @@ class CategoryDisplayActivity : AppCompatActivity() {
     }
 
     companion object{
+        val CATEGORY_DISPLAY_OBJECT = "CATEGORY_DISPLAY_OBJECT"
         val DELETE_TYPE_CATEGORY = "DELETE_CATEGORY"
         val DELETE_TYPE_TASK = "DELETE_TASK"
     }

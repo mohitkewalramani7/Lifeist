@@ -1,3 +1,3 @@
 package com.example.lifeist.category
 
-class Category(val title: String, val size: Int)
+class Category(var title: String = "Test Category", var size: Int = 0)

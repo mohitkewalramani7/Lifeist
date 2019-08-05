@@ -1,10 +1,10 @@
 package com.example.lifeist.category
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.button.MaterialButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lifeist.R
+import com.google.android.material.button.MaterialButton
 
 class CreateAndEditCategoryActivity : AppCompatActivity() {
 

@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.Fragment
 import com.example.lifeist.category.CreateAndEditCategoryActivity
 import com.example.lifeist.category.Category
 import com.example.lifeist.category.CategoryDisplayActivity
-import com.example.lifeist.HomeActivity
 import com.example.lifeist.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.*
 
 /**
  * A simple [Fragment] subclass.
@@ -26,7 +27,9 @@ import com.example.lifeist.R
  *
  */
 class DashboardFragment : Fragment() {
+
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var database: DatabaseReference
     private lateinit var categoriesList: ListView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +65,29 @@ class DashboardFragment : Fragment() {
 
     private fun populateListView() : DashboardListAdapter {
         val dash = DashboardListAdapter()
-        dash.dashboardListItems = HomeActivity.categoryList
+        database = FirebaseDatabase.getInstance().reference
+
+        val postListener = object : ValueEventListener {
+
+            override fun onDataChange(p0: DataSnapshot) {
+                dash.dashboardListItems.clear()
+                val categoryList = p0.children.toList()[0]
+                for (category in categoryList.children){
+                    val categoryInstance = category.getValue(Category::class.java)
+                    if (categoryInstance != null)
+                        dash.dashboardListItems.add(categoryInstance)
+                    else
+                        Toast.makeText(context, "Error - Please try again later", Toast.LENGTH_SHORT).show()
+                }
+                dash.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                Toast.makeText(context, "Cancelled READ: ", Toast.LENGTH_SHORT).show()
+                Log.d("READCAT", p0.toException().toString())
+            }
+        }
+        database.addValueEventListener(postListener)
         return dash
     }
 

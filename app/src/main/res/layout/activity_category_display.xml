@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/categoryDisplayRoot"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -38,14 +38,14 @@
             app:layout_constraintBottom_toBottomOf="parent">
     </ListView>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:showIn="@layout/activity_category_display">
 
         <LinearLayout
                 android:id="@+id/taskViewBottomSheetRoot"
-                app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
                 android:orientation="vertical"
                 android:background="@color/white"
                 android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                     android:textAlignment="center"
                     android:textSize="22sp" />
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                     android:id="@+id/taskUpdateButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                     android:layout_marginBottom="@dimen/margin_medium" />
 
 
-            <android.support.design.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                     android:id="@+id/taskDeleteButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,9 +124,9 @@
         </LinearLayout>
 
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addTaskButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,4 +141,4 @@
             android:layout_margin="@dimen/margin_large"
             tools:ignore="VectorDrawableCompat"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

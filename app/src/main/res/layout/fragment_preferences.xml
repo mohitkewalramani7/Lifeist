@@ -40,7 +40,7 @@
                 android:textSize="@dimen/medium_text"
                 android:textAlignment="center"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/changeUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:textSize="@dimen/medium_text"
                 android:textAlignment="center"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/changeUserPhoneNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:textColor="@color/white"
                 android:textAlignment="center"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/changeUserPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:textColor="@color/white"
                 android:textAlignment="center"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/changeTaskDisplayDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                 android:textColor="@color/white"
                 android:textAlignment="center"/>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
                 android:id="@+id/changeNotificationSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,16 +1,12 @@
 package com.example.lifeist.task
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.button.MaterialButton
 import android.widget.DatePicker
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.lifeist.R
-import java.text.SimpleDateFormat
+import com.google.android.material.button.MaterialButton
 import java.util.*
 
 class CreateAndEditTaskActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener{

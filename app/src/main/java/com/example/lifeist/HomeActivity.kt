@@ -1,19 +1,17 @@
 package com.example.lifeist
 
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.lifeist.category.Category
 import com.example.lifeist.fragments.AllDatesFragment
 import com.example.lifeist.fragments.DashboardFragment
 import com.example.lifeist.fragments.PreferencesFragment
 import com.example.lifeist.task.Task
-import kotlinx.android.synthetic.main.activity_home.*
-import java.util.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.collections.ArrayList
 
 class HomeActivity :
@@ -21,6 +19,8 @@ class HomeActivity :
     AllDatesFragment.OnFragmentInteractionListener,
     DashboardFragment.OnFragmentInteractionListener,
     PreferencesFragment.OnFragmentInteractionListener {
+
+    private lateinit var bottomView: BottomNavigationView
 
     private var allDates: AllDatesFragment? = null
     private var dashboard: DashboardFragment? = null
@@ -32,8 +32,9 @@ class HomeActivity :
         categoryList = constructCategoryDummyData()
         dateList = constructDatesDummyData()
         taskList = constructTasksData()
+        bottomView = findViewById(R.id.bottomNavigationView)
         setupBottomNavigationListener()
-        bottomNavigationView.selectedItemId = R.id.dashboard
+        bottomView.selectedItemId = R.id.dashboard
     }
 
     private fun constructCategoryDummyData() : ArrayList<Category> {
@@ -68,7 +69,6 @@ class HomeActivity :
     }
 
     private fun setupBottomNavigationListener(){
-        val bottomView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomView.setOnNavigationItemSelectedListener {item ->
             bottomNavigationAction(item)
         }
