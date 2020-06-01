@@ -43,7 +43,7 @@ class HomeActivity :
             val allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
             val categoryTitle = (1..12).map { allowedChars.random() }.joinToString("")
             val categoryCount = (1..15).random()
-            categoryList.add(Category(categoryTitle, categoryCount))
+            categoryList.add(Category("", categoryTitle, ""))
         }
         return categoryList
     }

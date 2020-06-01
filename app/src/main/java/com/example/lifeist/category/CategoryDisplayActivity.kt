@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -15,8 +16,13 @@ import com.example.lifeist.task.CreateAndEditTaskActivity
 import com.example.lifeist.task.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class CategoryDisplayActivity : AppCompatActivity() {
+
+    val UPDATE_ID_VAL = 0;
 
     private lateinit var taskList: ListView;
     private lateinit var addTaskButton: FloatingActionButton;
@@ -25,9 +31,18 @@ class CategoryDisplayActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_display)
+        renderCategoryDetails(
+            intent.getStringExtra(CATEGORY_TITLE),
+            intent.getStringExtra(CATEGORY_DESCRIPTION)
+        )
         initializeTaskListview()
         setAddTaskButtonClickListener()
         initializeBottomSheetTaskViewer()
+    }
+
+    private fun renderCategoryDetails(categoryTitle: String, categoryDescription: String){
+        findViewById<TextView>(R.id.enteredCategoryTitle).text = categoryTitle
+        findViewById<TextView>(R.id.enteredCategoryDescription).text = categoryDescription
     }
 
     private fun initializeTaskListview(){
@@ -87,8 +102,8 @@ class CategoryDisplayActivity : AppCompatActivity() {
 
     private fun initializeDeleteTaskButton(deleteTaskButton: Button){
         deleteTaskButton.setOnClickListener{
-            val deleteFragment = DeleteCategoryAndTaskDialogFragment()
-            deleteFragment.deleteTarget = DELETE_TYPE_TASK
+            val deleteFragment = DeleteCategoryAndTaskDialogFragment("")
+            deleteFragment.deleteType = DELETE_TYPE_TASK
             deleteFragment.show(supportFragmentManager, "delete_task")
         }
     }
@@ -112,41 +127,74 @@ class CategoryDisplayActivity : AppCompatActivity() {
     }
 
     private fun startUpdateCategoryActivity() : Boolean{
-        val intent = Intent(this, CreateAndEditCategoryActivity::class.java)
-        intent.putExtra(
+        val updateIntent = Intent(this, CreateAndEditCategoryActivity::class.java)
+        updateIntent.putExtra(
             CreateAndEditCategoryActivity.INTENT_TYPE,
             CreateAndEditCategoryActivity.EDIT_CATEGORY
         )
-        startActivity(intent)
+        updateIntent.putExtra(
+            CATEGORY_KEY,
+            intent.getStringExtra(CATEGORY_KEY)
+        )
+        updateIntent.putExtra(
+            CATEGORY_TITLE,
+            intent.getStringExtra(CATEGORY_TITLE)
+        )
+        updateIntent.putExtra(
+            CATEGORY_DESCRIPTION,
+            intent.getStringExtra(CATEGORY_DESCRIPTION)
+        )
+        startActivityForResult(updateIntent, UPDATE_ID_VAL)
         return true
     }
 
     private fun showDeleteCategoryConfirmationPopup(): Boolean{
-        val deleteFragment = DeleteCategoryAndTaskDialogFragment()
-        deleteFragment.deleteTarget = DELETE_TYPE_CATEGORY
+        val categoryKey = intent.getStringExtra(CATEGORY_KEY)
+        val deleteFragment = DeleteCategoryAndTaskDialogFragment(categoryKey)
+        deleteFragment.deleteType = DELETE_TYPE_CATEGORY
         deleteFragment.show(supportFragmentManager, "delete_category")
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when(requestCode){
+            UPDATE_ID_VAL -> {
+                renderCategoryDetails(
+                    data!!.getStringExtra(CATEGORY_TITLE),
+                    data.getStringExtra(CATEGORY_DESCRIPTION)
+                )
+            }
+        }
     }
 
     companion object{
         val CATEGORY_DISPLAY_OBJECT = "CATEGORY_DISPLAY_OBJECT"
         val DELETE_TYPE_CATEGORY = "DELETE_CATEGORY"
         val DELETE_TYPE_TASK = "DELETE_TASK"
+
+        val CATEGORY_KEY: String = "CATEGORY_KEY"
+        val CATEGORY_TITLE: String = "CATEGORY_TITLE"
+        val CATEGORY_DESCRIPTION: String = "CATEGORY_DESCRIPTION"
     }
 
 }
 
-internal class DeleteCategoryAndTaskDialogFragment: DialogFragment(){
+internal class DeleteCategoryAndTaskDialogFragment(targetId: String): DialogFragment(){
 
-    internal var deleteTarget: Any? = null
+    internal var deleteType: Any? = null
+
+    private val user = FirebaseAuth.getInstance().currentUser
+    private var deleteTargetId: String = targetId;
+    private lateinit var database: DatabaseReference
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        database = FirebaseDatabase.getInstance().reference
         return activity?.let {
             // Use the Builder class for convenient dialog construction
             val builder: AlertDialog.Builder
-            if (deleteTarget != null && deleteTarget!!.equals(CategoryDisplayActivity.DELETE_TYPE_CATEGORY))
+            if (deleteType != null && deleteType!!.equals(CategoryDisplayActivity.DELETE_TYPE_CATEGORY))
                 builder = createDeleteCategoryBuilder(it)
-            else if (deleteTarget != null && deleteTarget!!.equals(CategoryDisplayActivity.DELETE_TYPE_TASK))
+            else if (deleteType != null && deleteType!!.equals(CategoryDisplayActivity.DELETE_TYPE_TASK))
                 builder = createDeleteTaskBuilder(it)
             else
                 builder = createEmptyBuilder(it)
@@ -159,7 +207,11 @@ internal class DeleteCategoryAndTaskDialogFragment: DialogFragment(){
         builder
             .setTitle(R.string.delete_category)
             .setMessage(R.string.delete_category_message)
-            .setPositiveButton("Delete", null) // TODO
+            .setPositiveButton("Delete"){_, _ ->
+                database.child(user!!.uid).child(deleteTargetId).removeValue()
+                Toast.makeText(context, "Category Deleted", Toast.LENGTH_SHORT).show()
+                activity!!.finish()
+            }
             .setNegativeButton("Cancel", null) // TODO
         return builder;
     }

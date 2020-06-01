@@ -16,9 +16,10 @@
             android:text="Your Category"
             android:textSize="@dimen/activity_headers"
             android:textAlignment="center"
-            android:paddingTop="@dimen/padding_extra_large" />
+            android:paddingTop="@dimen/padding_extra_large"
+            android:gravity="center_horizontal" />
 
-    <MultiAutoCompleteTextView
+    <TextView
             android:id="@+id/enteredCategoryDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +27,6 @@
             android:padding="@dimen/padding_medium"
             android:gravity="top"
             android:clickable="false"
-            android:hint="LOOOOOL"
             app:layout_constraintTop_toBottomOf="@id/enteredCategoryTitle"
             app:layout_constraintBottom_toBottomOf="@id/taskListview" />
 

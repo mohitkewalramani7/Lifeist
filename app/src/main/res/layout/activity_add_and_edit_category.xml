@@ -17,7 +17,8 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteY="16dp"
             tools:layout_editor_absoluteX="114dp"
-            android:textSize="@dimen/activity_headers"/>
+            android:textSize="@dimen/activity_headers"
+            android:gravity="center_horizontal" />
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/categoryTitleInput"

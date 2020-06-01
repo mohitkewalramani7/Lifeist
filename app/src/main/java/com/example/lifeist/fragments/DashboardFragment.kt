@@ -15,6 +15,7 @@ import com.example.lifeist.category.Category
 import com.example.lifeist.category.CategoryDisplayActivity
 import com.example.lifeist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 /**
@@ -71,13 +72,15 @@ class DashboardFragment : Fragment() {
 
             override fun onDataChange(p0: DataSnapshot) {
                 dash.dashboardListItems.clear()
-                val categoryList = p0.children.toList()[0]
+                val user = FirebaseAuth.getInstance().currentUser
+                val categoryList = p0.child(user!!.uid)
                 for (category in categoryList.children){
-                    val categoryInstance = category.getValue(Category::class.java)
-                    if (categoryInstance != null)
-                        dash.dashboardListItems.add(categoryInstance)
-                    else
-                        Toast.makeText(context, "Error - Please try again later", Toast.LENGTH_SHORT).show()
+                    val a: HashMap<String, String> = category.value as HashMap<String, String>
+                    dash.dashboardListItems.add(Category(
+                        category.key!!,
+                        a.get("title")!!,
+                        a.get("description")!!
+                    ))
                 }
                 dash.notifyDataSetChanged()
             }
@@ -95,14 +98,30 @@ class DashboardFragment : Fragment() {
         val addCategoryFab = activity!!.findViewById<FloatingActionButton>(R.id.addCategoryButton)
         addCategoryFab.setOnClickListener {
             val intent = Intent(context, CreateAndEditCategoryActivity::class.java)
-            intent.putExtra(CreateAndEditCategoryActivity.INTENT_TYPE, CreateAndEditCategoryActivity.CREATE_CATEGORY)
+            intent.putExtra(
+                CreateAndEditCategoryActivity.INTENT_TYPE,
+                CreateAndEditCategoryActivity.CREATE_CATEGORY
+            )
             startActivity(intent)
         }
     }
 
     private fun initializeListviewClickListener(){
-        categoriesList.onItemClickListener = AdapterView.OnItemClickListener {_, _, _, _ ->
+        categoriesList.onItemClickListener = AdapterView.OnItemClickListener {_, _, pos, _ ->
+            val clickedCategory: Category = categoriesList.adapter.getItem(pos) as Category
             val intent = Intent(context, CategoryDisplayActivity::class.java)
+            intent.putExtra(
+                CategoryDisplayActivity.CATEGORY_KEY,
+                clickedCategory.key
+            )
+            intent.putExtra(
+                CategoryDisplayActivity.CATEGORY_TITLE,
+                clickedCategory.title
+            )
+            intent.putExtra(
+                CategoryDisplayActivity.CATEGORY_DESCRIPTION,
+                clickedCategory.description
+            )
             startActivity(intent)
         }
     }
@@ -129,7 +148,7 @@ internal class DashboardListAdapter : BaseAdapter() {
         }
         val currentCategory: Category = getItem(position)
         setCategoryText(currentCategory.title, localConvertView!!)
-        setCategoryCount(currentCategory.size, localConvertView)
+        setCategoryDescription(currentCategory.description, localConvertView)
         return localConvertView
     }
 
@@ -138,14 +157,9 @@ internal class DashboardListAdapter : BaseAdapter() {
         categoryText.text = title
     }
 
-    private fun setCategoryCount(count: Int, localConvertView: View){
-        val categoryCount = localConvertView.findViewById<TextView>(R.id.listItemCount)
-        if (count > 1){
-            categoryCount.text = String.format("%d items", count)
-        }
-        else{
-            categoryCount.text = String.format("%d item", count)
-        }
+    private fun setCategoryDescription(description: String, localConvertView: View){
+        val categoryDescription = localConvertView.findViewById<TextView>(R.id.categoryDescription)
+        categoryDescription.text = description;
     }
 
     override fun getItem(position: Int): Category {
