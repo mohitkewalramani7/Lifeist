@@ -10,7 +10,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
-import com.example.lifeist.HomeActivity
 import com.example.lifeist.R
 import com.example.lifeist.task.CreateAndEditTaskActivity
 import com.example.lifeist.task.Task
@@ -24,7 +23,9 @@ class CategoryDisplayActivity : AppCompatActivity() {
 
     val UPDATE_ID_VAL = 0;
 
+    private lateinit var categoryKey: String;
     private lateinit var taskList: ListView;
+    private lateinit var selectedTask: Task;
     private lateinit var addTaskButton: FloatingActionButton;
     private lateinit var bottomSheetTaskViewer: BottomSheetBehavior<View>
 
@@ -35,6 +36,7 @@ class CategoryDisplayActivity : AppCompatActivity() {
             intent.getStringExtra(CATEGORY_TITLE),
             intent.getStringExtra(CATEGORY_DESCRIPTION)
         )
+        categoryKey = intent.getStringExtra(CATEGORY_KEY)
         initializeTaskListview()
         setAddTaskButtonClickListener()
         initializeBottomSheetTaskViewer()
@@ -53,17 +55,45 @@ class CategoryDisplayActivity : AppCompatActivity() {
 
     private fun populateTasksList(): TaskReadAdapter {
         val tasks = TaskReadAdapter()
-        tasks.taskListItems = HomeActivity.taskList
+        val tasksParsed
+                = intent.getSerializableExtra("tasklist")
+        val tasksList = tasksParsed as HashMap<String, String>
+        tasks.taskListItems = convertHashmaptoTasklist(tasksList)
         return tasks
+    }
+
+    private fun convertHashmaptoTasklist(taskList: HashMap<String, String>): ArrayList<Task>{
+        val parsedTaskList = ArrayList<Task>()
+        taskList.keys.forEach{
+            val taskData = taskList[it] as HashMap<String, String>
+            val task = Task(
+                taskData.get("title")!!,
+                taskData.get("description")!!,
+                taskData.get("dueDate")!!,
+                it
+            )
+            parsedTaskList.add(task)
+        }
+        return parsedTaskList
     }
 
     private fun setTaskListItemClickListener(){
         taskList.setOnItemClickListener { adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+            val clickedTask = adapterView.adapter.getItem(i) as Task
+            selectedTask = clickedTask
+            Log.d("MAYBEID?", "ID: " + clickedTask.id)
+            setDropdownDetails(clickedTask)
             if (bottomSheetTaskViewer.state == BottomSheetBehavior.STATE_HIDDEN)
                 bottomSheetTaskViewer.state = BottomSheetBehavior.STATE_EXPANDED
             else
                 bottomSheetTaskViewer.state = BottomSheetBehavior.STATE_HIDDEN
         }
+    }
+
+    private fun setDropdownDetails(clickedTask: Task){
+        findViewById<TextView>(R.id.dropdownTaskName).text = clickedTask.title
+        findViewById<TextView>(R.id.dropdownDueDate).text = clickedTask.dueDate
+        findViewById<TextView>(R.id.dropdownDescription).text = clickedTask.description
     }
 
     private fun setAddTaskButtonClickListener(){
@@ -75,8 +105,14 @@ class CategoryDisplayActivity : AppCompatActivity() {
 
     private fun showAddTaskActivity(){
         val intent = Intent(this, CreateAndEditTaskActivity::class.java)
-        intent.putExtra(CreateAndEditTaskActivity.INTENT_TYPE,
-            CreateAndEditTaskActivity.INTENT_TYPE_CREATE)
+        intent.putExtra(
+            CreateAndEditTaskActivity.INTENT_TYPE,
+            CreateAndEditTaskActivity.INTENT_TYPE_CREATE
+        )
+        intent.putExtra(
+            CATEGORY_KEY,
+            categoryKey
+        )
         startActivity(intent)
     }
 
@@ -93,16 +129,38 @@ class CategoryDisplayActivity : AppCompatActivity() {
     private fun initializeUpdateTaskButton(updateTaskButton: Button){
         updateTaskButton.setOnClickListener{
             val intent = Intent(this, CreateAndEditTaskActivity::class.java)
-            intent.putExtra(CreateAndEditTaskActivity.INTENT_TYPE, CreateAndEditTaskActivity.INTENT_TYPE_UPDATE)
-            intent.putExtra(CreateAndEditTaskActivity.INTENT_UPDATE_TASK_OBJECT,
-                "") // TODO
+            intent.putExtra(
+                CreateAndEditTaskActivity.INTENT_TYPE,
+                CreateAndEditTaskActivity.INTENT_TYPE_UPDATE
+            )
+            intent.putExtra(
+                CreateAndEditTaskActivity.TASK_TITLE,
+                selectedTask.title
+            )
+            intent.putExtra(
+                CreateAndEditTaskActivity.TASK_DUE_DATE,
+                selectedTask.dueDate
+            )
+            intent.putExtra(
+                CreateAndEditTaskActivity.TASK_DESCRIPTION,
+                selectedTask.description
+            )
+            intent.putExtra(
+                CATEGORY_KEY,
+                categoryKey
+            )
+            intent.putExtra(
+                CreateAndEditTaskActivity.TASK_KEY,
+                selectedTask.id
+            )
             startActivity(intent)
         }
     }
 
     private fun initializeDeleteTaskButton(deleteTaskButton: Button){
         deleteTaskButton.setOnClickListener{
-            val deleteFragment = DeleteCategoryAndTaskDialogFragment("")
+            val deleteFragment =
+                DeleteCategoryAndTaskDialogFragment(categoryKey, selectedTask.id)
             deleteFragment.deleteType = DELETE_TYPE_TASK
             deleteFragment.show(supportFragmentManager, "delete_task")
         }
@@ -179,12 +237,14 @@ class CategoryDisplayActivity : AppCompatActivity() {
 
 }
 
-internal class DeleteCategoryAndTaskDialogFragment(targetId: String): DialogFragment(){
+internal class DeleteCategoryAndTaskDialogFragment(categoryId: String, taskId: String = "")
+    : DialogFragment(){
 
     internal var deleteType: Any? = null
 
     private val user = FirebaseAuth.getInstance().currentUser
-    private var deleteTargetId: String = targetId;
+    private var categoryToDelete: String = categoryId
+    private var taskToDelete: String = taskId
     private lateinit var database: DatabaseReference
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -208,11 +268,11 @@ internal class DeleteCategoryAndTaskDialogFragment(targetId: String): DialogFrag
             .setTitle(R.string.delete_category)
             .setMessage(R.string.delete_category_message)
             .setPositiveButton("Delete"){_, _ ->
-                database.child(user!!.uid).child(deleteTargetId).removeValue()
+                database.child(user!!.uid).child(categoryToDelete).removeValue()
                 Toast.makeText(context, "Category Deleted", Toast.LENGTH_SHORT).show()
                 activity!!.finish()
             }
-            .setNegativeButton("Cancel", null) // TODO
+            .setNegativeButton("Cancel", null)
         return builder;
     }
 
@@ -221,8 +281,15 @@ internal class DeleteCategoryAndTaskDialogFragment(targetId: String): DialogFrag
         builder
             .setTitle(R.string.delete_task)
             .setMessage(R.string.delete_task_message)
-            .setPositiveButton("Delete", null) // TODO
-            .setNegativeButton("Cancel", null) // TODO
+            .setPositiveButton("Delete"){_, _ ->
+                database.child(user!!.uid)
+                    .child(categoryToDelete)
+                    .child("tasklist")
+                    .child(taskToDelete)
+                    .removeValue()
+                Toast.makeText(context, "Task Deleted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null)
         return builder;
     }
 

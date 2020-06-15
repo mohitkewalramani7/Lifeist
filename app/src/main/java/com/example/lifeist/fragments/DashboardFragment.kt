@@ -75,11 +75,12 @@ class DashboardFragment : Fragment() {
                 val user = FirebaseAuth.getInstance().currentUser
                 val categoryList = p0.child(user!!.uid)
                 for (category in categoryList.children){
-                    val a: HashMap<String, String> = category.value as HashMap<String, String>
+                    val a: HashMap<String, Any> = category.value as HashMap<String, Any>
                     dash.dashboardListItems.add(Category(
                         category.key!!,
-                        a.get("title")!!,
-                        a.get("description")!!
+                        a.get("title")!! as String,
+                        a.get("description")!! as String,
+                        checkNullTaskList(a) as HashMap<String, String>
                     ))
                 }
                 dash.notifyDataSetChanged()
@@ -92,6 +93,13 @@ class DashboardFragment : Fragment() {
         }
         database.addValueEventListener(postListener)
         return dash
+    }
+
+    private fun checkNullTaskList(category: HashMap<String, Any>): Any{
+        if (category.get("tasklist") === null){
+            return HashMap<String, String>()
+        }
+        return category.get("tasklist")!!
     }
 
     private fun initializeAddCategoryButton(){
@@ -121,6 +129,10 @@ class DashboardFragment : Fragment() {
             intent.putExtra(
                 CategoryDisplayActivity.CATEGORY_DESCRIPTION,
                 clickedCategory.description
+            )
+            intent.putExtra(
+                "tasklist",
+                clickedCategory.taskList
             )
             startActivity(intent)
         }
